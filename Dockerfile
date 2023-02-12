@@ -6,6 +6,10 @@ WORKDIR /usr/app
 # File Copy
 COPY ./supervisord.conf /etc/supervisord.conf 
 
+# APT Update
+RUN apt -y update && apt -y upgrade
+RUN apt install -y sudo
+
 # Create User
 ARG USERNAME=user
 ARG GROUPNAME=user
@@ -18,8 +22,7 @@ RUN groupadd -g $GID $GROUPNAME && \
     echo "$USERNAME   ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 USER $USERNAME
 
-# APT Update
-RUN sudo apt -y update && sudo apt -y upgrade
+
 
 # Install Packages
 RUN sudo apt install -y supervisor parprouted dhcp-helper iproute2 iputils-ping
